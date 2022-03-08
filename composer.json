@@ -1,22 +1,16 @@
 {
-    "name": "kscsdk/ksyun_sdk",
+    "name": "duzhenlin/ksyun_sdk",
     "description": "ksyun openapi sdk",
     "type": "library",
-    "homepage": "https://github.com/KscSDK/ksc-sdk-php",
+    "homepage": "https://github.com/duzhenlin/ksc-sdk-php",
     "keywords": [
         "openapi",
         "ksyun"
     ],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Yang Fan",
-            "email": "yangfan9915@gmail.com"
-        }
-    ],
     "require": {
         "php": ">=5.5",
-        "guzzlehttp/guzzle":"~6.2"
+        "guzzlehttp/guzzle":"^6.2 || ^7.0",
     },
     "autoload": {
         "psr-4": {
