@@ -1,24 +1,24 @@
 {
-    "name": "duzhenlin/ksyun_sdk",
-    "description": "ksyun openapi sdk",
-    "type": "library",
-    "homepage": "https://github.com/duzhenlin/ksc-sdk-php",
-    "keywords": [
-        "openapi",
-        "ksyun"
-    ],
-    "license": "MIT",
-    "require": {
-        "php": ">=5.5",
-        "guzzlehttp/guzzle":"^6.2 || ^7.0",
-    },
-    "autoload": {
-        "psr-4": {
-            "Ksyun\\": "src/",
-            "Test\\": "tests/"
-        }
-    },
-    "config": {
-        "secure-http": false
+  "name": "duzhenlin/ksyun_sdk",
+  "description": "ksyun openapi sdk",
+  "type": "library",
+  "homepage": "https://github.com/duzhenlin/ksc-sdk-php",
+  "keywords": [
+    "openapi",
+    "ksyun"
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=5.5",
+    "guzzlehttp/guzzle": "^6.2 || ^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ksyun\\": "src/",
+      "Test\\": "tests/"
     }
+  },
+  "config": {
+    "secure-http": false
+  }
 }
