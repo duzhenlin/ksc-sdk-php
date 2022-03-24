@@ -1,4 +1,5 @@
 <?php
+
 namespace Ksyun\Base;
 
 use GuzzleHttp\Psr7;
@@ -11,30 +12,32 @@ use Psr\Http\Message\RequestInterface;
 class SignatureV4
 {
     use SignatureTrait;
+
     const ISO8601_BASIC = 'Ymd\THis\Z';
 
     public function signRequest(
         RequestInterface $request,
-        $credentials
-    ) {
-        $ldt = gmdate(self::ISO8601_BASIC);
-        $sdt = substr($ldt, 0, 8);
-        $parsed = $this->parseRequest($request);
+                         $credentials
+    )
+    {
+        $ldt                             = gmdate(self::ISO8601_BASIC);
+        $sdt                             = substr($ldt, 0, 8);
+        $parsed                          = $this->parseRequest($request);
         $parsed['headers']['X-Amz-Date'] = [$ldt];
 
-        $cs = $this->createScope($sdt, $credentials['region'], $credentials['service']);
-        $payload = $this->getPayload($request);
-        $context = $this->createContext($parsed, $payload);
-        $toSign = $this->createStringToSign($ldt, $cs, $context['creq']);
+        $cs         = $this->createScope($sdt, $credentials['region'], $credentials['service']);
+        $payload    = $this->getPayload($request);
+        $context    = $this->createContext($parsed, $payload);
+        $toSign     = $this->createStringToSign($ldt, $cs, $context['creq']);
         $signingKey = $this->getSigningKey(
             $sdt,
             $credentials['region'],
             $credentials['service'],
             $credentials['sk']
         );
-        $signature = hash_hmac('sha256', $toSign, $signingKey);
+        $signature  = hash_hmac('sha256', $toSign, $signingKey);
 
-        $ak = $credentials['ak'];
+        $ak                                 = $credentials['ak'];
         $parsed['headers']['Authorization'] = [
             "AWS4-HMAC-SHA256 "
             . "Credential={$ak}/{$cs}, "
@@ -57,7 +60,7 @@ class SignatureV4
         }
 
         try {
-            return Psr7\hash($request->getBody(), 'sha256');
+            return Psr7\Utils::hash($request->getBody(), 'sha256');
         } catch (\Exception $e) {
             throw new CouldNotCreateChecksumException('sha256', $e);
         }
@@ -135,7 +138,7 @@ class SignatureV4
         }
 
         $signedHeadersString = implode(';', array_keys($aggregate));
-        $canon .= implode("\n", $canonHeaders) . "\n\n"
+        $canon               .= implode("\n", $canonHeaders) . "\n\n"
             . $signedHeadersString . "\n"
             . $payload;
 
@@ -174,12 +177,12 @@ class SignatureV4
             ->withoutHeader('X-Amz-Date')
             ->withoutHeader('Date')
             ->withoutHeader('Authorization');
-        $uri = $request->getUri();
+        $uri     = $request->getUri();
 
         return [
             'method'  => $request->getMethod(),
             'path'    => $uri->getPath(),
-            'query'   => Psr7\parse_query($uri->getQuery()),
+            'query'   => Psr7\Query::parse($uri->getQuery()),
             'uri'     => $uri,
             'headers' => $request->getHeaders(),
             'body'    => $request->getBody(),
@@ -190,7 +193,7 @@ class SignatureV4
     private function buildRequest(array $req)
     {
         if ($req['query']) {
-            $req['uri'] = $req['uri']->withQuery(Psr7\build_query($req['query']));
+            $req['uri'] = $req['uri']->withQuery(Psr7\Query::build($req['query']));
         }
 
         return new Psr7\Request(
