@@ -1,5 +1,6 @@
 {
   "name": "duzhenlin/ksyun_sdk",
+   "version":"0.33",
   "description": "ksyun openapi sdk",
   "type": "library",
   "homepage": "https://github.com/duzhenlin/ksc-sdk-php",
